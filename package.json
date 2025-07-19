@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "npx json-server --watch mock/db.json",
+    "server-delay": "npx json-server --watch mock/db.json --delay 2500"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
