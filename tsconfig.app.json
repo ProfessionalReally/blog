@@ -24,8 +24,11 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"],
+      "@src/*": [
+        "src/*"
+      ]
     }
   },
   "include": [
