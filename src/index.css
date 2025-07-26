@@ -1,1 +1,23 @@
-@include url('fonts/font-awesome.css')
+@import url('fonts/font-awesome.css');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #405060;
+    color: #1c1c1c;
+}
+
+html, body, #root {
+    height: 100%;
+}
+
+a {
+    color: #1c1c1c;
+    text-decoration: none;
+}
+
