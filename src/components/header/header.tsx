@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 
-import { ControlPanel } from '@src/components/header/control-panel/control-panel';
 import styled from 'styled-components';
 
+import { ControlPanel } from './control-panel/control-panel';
 import { Logo } from './logo/logo';
 
 type HeaderType = {
@@ -37,7 +37,7 @@ export const Header = styled(HeaderContainer)`
 	z-index: 9;
 	background-color: #fff;
 	width: 1000px;
-	height: 175px;
+	height: 120px;
 	padding: 20px 40px;
 	border: 3px solid #adadad;
 	box-shadow: 0 -7px 35px 9px #616161;

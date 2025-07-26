@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import { Icon } from '@src/components/icon/icon';
+import { Icon } from '@src/components';
 import { ROUTES } from '@src/constants';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -21,6 +21,7 @@ const Button = styled.button`
 	width: 100px;
 	height: 32px;
 `;
+
 const StyledButton = styled.div`
 	cursor: pointer;
 `;

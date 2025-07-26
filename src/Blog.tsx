@@ -1,10 +1,10 @@
-import { Header } from '@src/components';
+import { Footer, Header } from '@src/components';
 import { ROUTES } from '@src/constants';
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Content = styled.div`
-	padding: 120px 0;
+const Content = styled.main`
+	padding: 40px;
 `;
 
 const H2 = styled.h2`
@@ -18,10 +18,9 @@ const AppColumn = styled.div`
 	width: 1000px;
 	min-height: 100%;
 	background: #fff;
-	margin: 175px auto 0 auto;
+	margin: 0 auto;
+	padding-top: 120px;
 `;
-
-const Footer = () => <div>Подвал</div>;
 
 export const Blog = () => (
 	<AppColumn>

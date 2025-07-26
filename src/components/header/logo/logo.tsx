@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import { Icon } from '@src/components/icon/icon';
+import { Icon } from '@src/components';
 import { ROUTES } from '@src/constants';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
