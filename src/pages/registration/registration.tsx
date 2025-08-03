@@ -1,17 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { server } from '@src/bff';
-import { AuthFormError, Button } from '@src/components';
+import { Button } from '@src/components';
+import { AuthFormError } from '@src/components';
 import { Input } from '@src/components/input/input';
 import { ROUTES } from '@src/constants';
 import { useAppDispatch } from '@src/redux/hooks/hooks';
 import { type IUserState, setUser } from '@src/redux/reducers';
 import { type FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import * as yup from 'yup';
 
-const authFormSchema = yup.object().shape({
+const registrationFormSchema = yup.object().shape({
+	confirmPassword: yup
+		.string()
+		.required('Подтвердите пароль')
+		.oneOf([yup.ref('password')], 'Повтор пароля не совпадает'),
 	login: yup
 		.string()
 		.required('Заполните логин')
@@ -29,9 +34,9 @@ const authFormSchema = yup.object().shape({
 		.max(30, 'Неверный логин. Максимум 30 символов'),
 });
 
-type AuthFormData = yup.InferType<typeof authFormSchema>;
+type RegistrationFormData = yup.InferType<typeof registrationFormSchema>;
 
-type AuthFormProps = {
+type RegistrationFormProps = {
 	className?: string;
 };
 
@@ -42,13 +47,7 @@ const StyledForm = styled.form`
 	gap: 10px;
 `;
 
-const StyledLink = styled(Link)`
-	text-align: center;
-	text-decoration: underline;
-	color: blue;
-`;
-
-const AuthContainer: FC<AuthFormProps> = ({ className }) => {
+const RegistrationContainer: FC<RegistrationFormProps> = ({ className }) => {
 	const [serverError, setServerError] = useState('');
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
@@ -58,18 +57,19 @@ const AuthContainer: FC<AuthFormProps> = ({ className }) => {
 		handleSubmit,
 		register,
 		reset,
-	} = useForm<AuthFormData>({
+	} = useForm<RegistrationFormData>({
 		defaultValues: {
+			confirmPassword: '',
 			login: '',
 			password: '',
 		},
 		mode: 'onBlur',
-		resolver: yupResolver(authFormSchema),
+		resolver: yupResolver(registrationFormSchema),
 	});
 
-	const onSubmit = async ({ login, password }: AuthFormData) => {
+	const onSubmit = async ({ login, password }: RegistrationFormData) => {
 		try {
-			const { error, response } = await server.authorize({
+			const { error, response } = await server.register({
 				login,
 				password,
 			});
@@ -93,7 +93,10 @@ const AuthContainer: FC<AuthFormProps> = ({ className }) => {
 			setServerError(`Ошибка: ${e}`);
 		}
 	};
-	const formError = errors.login?.message || errors.password?.message;
+	const formError =
+		errors.login?.message ||
+		errors.password?.message ||
+		errors.confirmPassword?.message;
 
 	const errorMessage = formError || serverError;
 
@@ -115,17 +118,22 @@ const AuthContainer: FC<AuthFormProps> = ({ className }) => {
 					register={register}
 					type='password'
 				/>
+				<Input
+					name='confirmPassword'
+					placeholder='Подтвердите пароль...'
+					register={register}
+					type='password'
+				/>
 				<Button disabled={isDisabled} type='submit'>
-					Войти
+					Зарегистрироваться
 				</Button>
 				{errorMessage && <AuthFormError>{errorMessage}</AuthFormError>}
-				<StyledLink to={ROUTES.REGISTER}>Зарегистрироваться</StyledLink>
 			</StyledForm>
 		</div>
 	);
 };
 
-export const Auth = styled(AuthContainer)`
+export const Registration = styled(RegistrationContainer)`
 	display: flex;
 	flex-direction: column;
 	align-items: center;

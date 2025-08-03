@@ -1,8 +1,7 @@
 import type { IUserAuth } from '@src/types';
 
-import { createUser, getUser } from '@src/bff';
+import { addUser, getUser } from '@src/bff';
 import { sessions } from '@src/bff/sessions';
-import { ROLES } from '@src/constants';
 
 export const server = {
 	async authorize({ login, password }: IUserAuth) {
@@ -38,23 +37,23 @@ export const server = {
 	},
 
 	async register({ login, password }: IUserAuth) {
-		const user = await getUser(login);
+		const userFind = await getUser(login);
 
-		if (user) {
+		if (userFind) {
 			return {
 				error: 'Такой логин уже занят',
 				response: null,
 			};
 		}
 
-		await createUser({ login, password });
+		const user = await addUser({ login, password });
 
 		return {
 			error: null,
 			response: {
 				id: user.id,
 				login: user.login,
-				role_id: ROLES.GUEST,
+				role_id: user.role_id,
 				session: sessions.create(user),
 			},
 		};

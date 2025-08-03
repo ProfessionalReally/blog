@@ -1,3 +1,4 @@
+export * from './auth-form-error/auth-form-error';
 export * from './button/button';
 export * from './footer/footer';
 export * from './header/header';

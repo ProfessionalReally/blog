@@ -1,5 +1,5 @@
+export * from './add-user.ts';
 export * from './create-session';
-export * from './create-user';
 export * from './generate-random-date';
 export * from './get-user';
 export * from './get-users';

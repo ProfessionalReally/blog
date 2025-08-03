@@ -1,9 +1,15 @@
 import type { IUser } from '@src/types';
 
-import { getUsers } from '@src/bff';
+import axios from 'axios';
 
 export const getUser = async (loginToFind: string) => {
-	const users: IUser[] = await getUsers();
-	
-	return users.find(({ login }) => login === loginToFind);
+	const { data }: { data: IUser[] } = await axios.get(
+		`${import.meta.env.VITE_BASE_URL}users/`,
+		{
+			params: {
+				login: loginToFind,
+			},
+		},
+	);
+	return data[0];
 };

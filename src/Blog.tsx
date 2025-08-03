@@ -1,6 +1,7 @@
 import { Footer, Header } from '@src/components';
 import { ROUTES } from '@src/constants';
 import { Auth } from '@src/pages/auth/auth.tsx';
+import { Registration } from '@src/pages/registration/registration.tsx';
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -29,10 +30,7 @@ export const Blog = () => (
 					path={ROUTES.MAIN}
 				/>
 				<Route element={<Auth />} path={ROUTES.LOGIN} />
-				<Route
-					element={<div>Регистрация</div>}
-					path={ROUTES.REGISTER}
-				/>
+				<Route element={<Registration />} path={ROUTES.REGISTER} />
 				<Route
 					element={<div>Страница пользователей</div>}
 					path={ROUTES.USERS}
