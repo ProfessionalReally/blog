@@ -1,14 +1,11 @@
 import { Footer, Header } from '@src/components';
 import { ROUTES } from '@src/constants';
+import { Auth } from '@src/pages/auth/auth.tsx';
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Content = styled.main`
 	padding: 40px;
-`;
-
-const H2 = styled.h2`
-	text-align: center;
 `;
 
 const AppColumn = styled.div`
@@ -26,13 +23,12 @@ export const Blog = () => (
 	<AppColumn>
 		<Header />
 		<Content>
-			<H2>Контент страницы</H2>
 			<Routes>
 				<Route
 					element={<div>Главная страница</div>}
 					path={ROUTES.MAIN}
 				/>
-				<Route element={<div>Авторизация</div>} path={ROUTES.LOGIN} />
+				<Route element={<Auth />} path={ROUTES.LOGIN} />
 				<Route
 					element={<div>Регистрация</div>}
 					path={ROUTES.REGISTER}

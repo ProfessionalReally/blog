@@ -46,7 +46,7 @@ const FooterContainer: FC<FooterContainerType> = ({ className }) => {
 									</div>
 									<div>
 										{weather.weather[0].description}
-										{' - '}
+										{', '}
 										{Math.round(weather.main.temp)}°C
 									</div>
 								</>

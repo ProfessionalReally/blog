@@ -8,3 +8,7 @@ export interface IUserAuth {
 	login: string;
 	password: string;
 }
+
+export interface IUserSession extends IUser {
+	session: string;
+}

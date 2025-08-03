@@ -1,6 +1,8 @@
 import type { IUserAuth } from '@src/types';
 
-import { createSession, createUser, getUser } from '@src/bff';
+import { createUser, getUser } from '@src/bff';
+import { sessions } from '@src/bff/sessions';
+import { ROLES } from '@src/constants';
 
 export const server = {
 	async authorize({ login, password }: IUserAuth) {
@@ -22,8 +24,17 @@ export const server = {
 
 		return {
 			error: null,
-			response: createSession(user.role_id),
+			response: {
+				id: user.id,
+				login: user.login,
+				role_id: user.role_id,
+				session: sessions.create(user),
+			},
 		};
+	},
+
+	async logout(session: string) {
+		sessions.remove(session);
 	},
 
 	async register({ login, password }: IUserAuth) {
@@ -40,7 +51,12 @@ export const server = {
 
 		return {
 			error: null,
-			response: createSession(user.role_id),
+			response: {
+				id: user.id,
+				login: user.login,
+				role_id: ROLES.GUEST,
+				session: sessions.create(user),
+			},
 		};
 	},
 };
