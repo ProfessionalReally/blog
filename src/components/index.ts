@@ -1,5 +1,6 @@
 export * from './auth-form-error/auth-form-error';
 export * from './button/button';
+export * from './content/content';
 export * from './footer/footer';
 export * from './header/header';
 export * from './icon/icon';

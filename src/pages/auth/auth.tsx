@@ -82,7 +82,7 @@ const AuthContainer: FC<AuthFormProps> = ({ className }) => {
 			const userPayload: IUserState = {
 				id: response.id,
 				login: response.login,
-				role_id: response.role_id,
+				roleId: response.roleId,
 				session: response.session,
 			};
 

@@ -24,10 +24,6 @@ const Aligned = styled.div`
 	gap: 24px;
 `;
 
-const StyledIcon = styled.div`
-	cursor: pointer;
-`;
-
 const StyledLink = styled(Link)`
 	width: 100%;
 `;
@@ -55,21 +51,19 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 				) : (
 					<>
 						<Username>{login}</Username>
-						<StyledIcon
+						<Icon
+							id={'fa-sign-out'}
 							onClick={() => {
 								server.logout(session);
 								dispatch(logout());
 							}}
-						>
-							<Icon id={'fa-sign-out'} size={'28px'} />
-						</StyledIcon>
+							size={'28px'}
+						/>
 					</>
 				)}
 			</Aligned>
 			<Aligned>
-				<StyledIcon onClick={() => navigate(-1)}>
-					<Icon id={'fa-backward'} />
-				</StyledIcon>
+				<Icon id={'fa-backward'} onClick={() => navigate(-1)} />
 				<Link to={ROUTES.POST}>
 					<Icon id={'fa-file-text-o'} />
 				</Link>

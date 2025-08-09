@@ -1,6 +1,15 @@
 import type { IUser } from '@src/types';
 
 export const sessions = {
+	access(hash: string, accessRoles: string[]) {
+		const user = this.list[hash];
+
+		if (!user) {
+			return false;
+		}
+
+		return accessRoles.includes(user.roleId);
+	},
 	create(user: IUser) {
 		const hash = Math.random().toString(36).substring(2);
 

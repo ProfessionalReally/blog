@@ -1,7 +1,7 @@
 export interface IUser extends IUserAuth {
 	id: string;
-	registered_at: string;
-	role_id: string;
+	registeredAt: string;
+	roleId: string;
 }
 
 export interface IUserAuth {

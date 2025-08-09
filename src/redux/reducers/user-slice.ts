@@ -4,14 +4,14 @@ import { ROLES } from '@src/constants';
 export type IUserState = {
 	id: string;
 	login: string;
-	role_id: string;
+	roleId: string;
 	session: string;
 };
 
 const initialUserState: IUserState = {
 	id: '',
 	login: '',
-	role_id: ROLES.GUEST,
+	roleId: ROLES.GUEST,
 	session: '',
 };
 
@@ -25,7 +25,7 @@ const userSlice = createSlice({
 		setUser: (state, action: PayloadAction<IUserState>) => {
 			state.id = action.payload.id;
 			state.login = action.payload.login;
-			state.role_id = action.payload.role_id;
+			state.roleId = action.payload.roleId;
 			state.session = action.payload.session;
 		},
 	},

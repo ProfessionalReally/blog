@@ -1,11 +1,10 @@
 import { Footer, Header } from '@src/components';
 import { ROUTES } from '@src/constants';
-import { Auth } from '@src/pages/auth/auth.tsx';
-import { Registration } from '@src/pages/registration/registration.tsx';
+import { Auth, Registration, Users } from '@src/pages';
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Content = styled.main`
+const Page = styled.main`
 	padding: 40px;
 `;
 
@@ -23,7 +22,7 @@ const AppColumn = styled.div`
 export const Blog = () => (
 	<AppColumn>
 		<Header />
-		<Content>
+		<Page>
 			<Routes>
 				<Route
 					element={<div>Главная страница</div>}
@@ -31,17 +30,14 @@ export const Blog = () => (
 				/>
 				<Route element={<Auth />} path={ROUTES.LOGIN} />
 				<Route element={<Registration />} path={ROUTES.REGISTER} />
-				<Route
-					element={<div>Страница пользователей</div>}
-					path={ROUTES.USERS}
-				/>
+				<Route element={<Users />} path={ROUTES.USERS} />
 				<Route element={<div>Новая статья</div>} path={ROUTES.POST} />
 				<Route
 					element={<div>Страница статьи</div>}
 					path={ROUTES.POST_ID}
 				/>
 			</Routes>
-		</Content>
+		</Page>
 		<Footer />
 	</AppColumn>
 );

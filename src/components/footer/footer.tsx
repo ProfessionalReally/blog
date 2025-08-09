@@ -12,8 +12,8 @@ const FooterContainer: FC<FooterContainerType> = ({ className }) => {
 
 	const fetchWeather = async (city: string) => {
 		setLoading(true);
+
 		const weather = await getWeather(city);
-		console.log(weather);
 		if (weather) {
 			setWeather(weather);
 		}
