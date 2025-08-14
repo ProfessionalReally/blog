@@ -41,6 +41,12 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 	const login = useAppSelector(selectUserLogin);
 	const session = useAppSelector(selectUserSession);
 
+	const onLogout = (session: string) => {
+		server.logout(session);
+		dispatch(logout());
+		sessionStorage.removeItem('userData');
+	};
+
 	return (
 		<div className={className}>
 			<Aligned>
@@ -53,10 +59,7 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 						<Username>{login}</Username>
 						<Icon
 							id={'fa-sign-out'}
-							onClick={() => {
-								server.logout(session);
-								dispatch(logout());
-							}}
+							onClick={() => onLogout(session)}
 							size={'28px'}
 						/>
 					</>

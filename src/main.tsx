@@ -1,4 +1,4 @@
-import { Blog } from '@src/Blog';
+import { Blog } from '@src/blog.tsx';
 import { store } from '@src/redux/store/store';
 import '@src/index.css';
 import { StrictMode } from 'react';

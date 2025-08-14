@@ -2,10 +2,12 @@ import { deleteUser } from '@src/bff/api';
 import { sessions } from '@src/bff/sessions.ts';
 import { ROLES } from '@src/constants';
 
-export const removeUser = async (userSession: string, id: string) => {
+export const removeUser = async (hash: string, id: string) => {
 	const accessRoles = [ROLES.ADMIN];
 
-	if (!sessions.access(userSession, accessRoles)) {
+	const access = await sessions.access(hash, accessRoles);
+
+	if (!access) {
 		return {
 			error: 'Доступ запрещен',
 			response: null,

@@ -1,9 +1,8 @@
 import type { IUser, IUserAuth } from '@src/types';
 
+import { generateRandomDate } from '@src/bff/utils';
 import { ROLES } from '@src/constants';
 import axios from 'axios';
-
-import { generateRandomDate } from '../utils/generate-random-date.ts';
 
 export const addUser = async ({ login, password }: IUserAuth) => {
 	const response = axios.post<IUser>(

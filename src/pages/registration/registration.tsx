@@ -87,6 +87,7 @@ const RegistrationContainer: FC<RegistrationFormProps> = ({ className }) => {
 			};
 
 			await dispatch(setUser(userPayload));
+			sessionStorage.setItem('userData', JSON.stringify(userPayload));
 			reset();
 			navigate(ROUTES.MAIN);
 		} catch (e) {

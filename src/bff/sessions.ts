@@ -1,8 +1,16 @@
 import type { IUser } from '@src/types';
 
+import { addSession, deleteSession, getSession, getUser } from '@src/bff/api';
+
 export const sessions = {
-	access(hash: string, accessRoles: string[]) {
-		const user = this.list[hash];
+	async access(hash: string, accessRoles: string[]) {
+		const session = await getSession(hash);
+
+		if (!session) {
+			return false;
+		}
+
+		const user = await getUser(session.userId);
 
 		if (!user) {
 			return false;
@@ -13,12 +21,17 @@ export const sessions = {
 	create(user: IUser) {
 		const hash = Math.random().toString(36).substring(2);
 
-		this.list[hash] = user;
+		addSession(hash, user);
 
 		return hash;
 	},
-	list: {} as Record<string, IUser>,
-	remove(hash: string) {
-		delete this.list[hash];
+	async remove(hash: string) {
+		const session = await getSession(hash);
+
+		if (!session) {
+			return;
+		}
+
+		deleteSession(session.id);
 	},
 };

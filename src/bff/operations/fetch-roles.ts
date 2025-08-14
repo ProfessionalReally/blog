@@ -3,10 +3,12 @@ import { ROLES } from '@src/bff/constants';
 import { getRoles } from '../api';
 import { sessions } from '../sessions';
 
-export const fetchRoles = async (userSession: string) => {
+export const fetchRoles = async (hash: string) => {
 	const accessRoles = [ROLES.ADMIN];
 
-	if (!sessions.access(userSession, accessRoles)) {
+	const access = await sessions.access(hash, accessRoles);
+
+	if (!access) {
 		return {
 			error: 'Доступ запрещен',
 			response: null,

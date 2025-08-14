@@ -3,13 +3,15 @@ import { ROLES } from '@src/bff/constants';
 import { sessions } from '@src/bff/sessions.ts';
 
 export const updateUserRole = async (
-	userSession: string,
+	hash: string,
 	id: string,
 	roleId: string,
 ) => {
 	const accessRoles = [ROLES.ADMIN];
 
-	if (!sessions.access(userSession, accessRoles)) {
+	const access = await sessions.access(hash, accessRoles);
+
+	if (!access) {
 		return {
 			error: 'Доступ запрещен',
 			response: null,

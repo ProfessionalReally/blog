@@ -22,4 +22,7 @@ export const Icon = styled(IconContainer)`
 	margin: ${({ margin = '0' }) => margin};
 	color: ${({ disabled }) => (disabled ? '#ccc' : '#1c1c1c')};
 	cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `;

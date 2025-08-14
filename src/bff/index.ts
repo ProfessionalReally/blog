@@ -1,1 +1,3 @@
-export * from './server.ts';
+import * as server from './operations';
+
+export { server };

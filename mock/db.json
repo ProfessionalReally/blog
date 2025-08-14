@@ -126,5 +126,44 @@
       "published_at": "2025-06-10"
     }
   ],
-  "comments": []
+  "comments": [
+    {
+      "author_id": "1",
+      "content": "dasdasd",
+      "post_id": "67zkMKi",
+      "published_at": "2344-12-14 04:09",
+      "id": 1
+    },
+    {
+      "author_id": "1",
+      "content": "dasdasdasd21312323123123123",
+      "post_id": "67zkMKi",
+      "published_at": "2109-07-05 07:18",
+      "id": 2
+    }
+  ],
+  "sessions": [
+    {
+      "hash": "ke5f9z46ub",
+      "user": {
+        "id": "67zkMKi",
+        "login": "anton1234",
+        "password": "qwerty123",
+        "registered_at": "2156-12-05 09:11",
+        "role_id": "0"
+      },
+      "id": 1
+    },
+    {
+      "hash": "3v38svqoh6j",
+      "user": {
+        "id": "67zkMKi",
+        "login": "anton1234",
+        "password": "qwerty123",
+        "registered_at": "2156-12-05 09:11",
+        "role_id": "0"
+      },
+      "id": 2
+    }
+  ]
 }
