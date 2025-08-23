@@ -1,7 +1,11 @@
 import type { IComment } from '@src/types';
 
 import { createSlice } from '@reduxjs/toolkit';
-import { addComment, fetchPost } from '@src/redux/actions/actions.ts';
+import {
+	addComment,
+	fetchPost,
+	removeComment,
+} from '@src/redux/actions/actions.ts';
 
 export type IPostState = {
 	comments: IComment[];
@@ -34,7 +38,8 @@ const postSlice = createSlice({
 	extraReducers(builder) {
 		builder
 			.addCase(fetchPost.fulfilled, updatePost)
-			.addCase(addComment.fulfilled, updatePost);
+			.addCase(addComment.fulfilled, updatePost)
+			.addCase(removeComment.fulfilled, updatePost);
 	},
 	initialState: initialPostState,
 	name: 'post',

@@ -10,7 +10,7 @@ export const sessions = {
 			return false;
 		}
 
-		const user = await getUser(session.userId);
+		const user = await getUser(session.user.login);
 
 		if (!user) {
 			return false;

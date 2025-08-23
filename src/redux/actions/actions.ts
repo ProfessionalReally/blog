@@ -2,7 +2,11 @@ import type { IPostState } from '@src/redux/reducers';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { useServerRequest } from '@src/hooks';
-import { ADD_COMMENT, FETCH_POST } from '@src/redux/actions/actionTypes';
+import {
+	ADD_COMMENT,
+	FETCH_POST,
+	REMOVE_COMMENT,
+} from '@src/redux/actions/actionTypes';
 
 export const fetchPost = createAsyncThunk<
 	IPostState,
@@ -32,6 +36,23 @@ export const addComment = createAsyncThunk<
 		postId,
 		userId,
 	);
+
+	if (!result || !result.response) {
+		return;
+	}
+
+	return result.response;
+});
+
+export const removeComment = createAsyncThunk<
+	IPostState,
+	{
+		id: string;
+		postId: string;
+		requestServer: ReturnType<typeof useServerRequest>;
+	}
+>(REMOVE_COMMENT, async ({ id, postId, requestServer }) => {
+	const result = await requestServer('removePostComment', id, postId);
 
 	if (!result || !result.response) {
 		return;

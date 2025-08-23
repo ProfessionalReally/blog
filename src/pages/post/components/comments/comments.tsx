@@ -56,7 +56,11 @@ const CommentsContainer: FC<CommentsContainerProps> = ({
 			</div>
 			<div className='comments'>
 				{comments.map((comment) => (
-					<Comment comment={comment} key={comment.id} />
+					<Comment
+						comment={comment}
+						key={comment.id}
+						postId={postId}
+					/>
 				))}
 			</div>
 		</div>

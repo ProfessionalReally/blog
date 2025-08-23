@@ -1,4 +1,4 @@
-import { Footer, Header } from '@src/components';
+import { Footer, Header, Modal } from '@src/components';
 import { ROUTES } from '@src/constants';
 import { Auth, Registration, Users } from '@src/pages';
 import { Post } from '@src/pages/post/post.tsx';
@@ -63,6 +63,7 @@ export const Blog = () => {
 				</Routes>
 			</Page>
 			<Footer />
+			<Modal />
 		</AppColumn>
 	);
 };

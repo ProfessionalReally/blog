@@ -2,18 +2,40 @@ import type { IComment } from '@src/types';
 import type { FC } from 'react';
 
 import { Icon } from '@src/components';
+import { useServerRequest } from '@src/hooks';
+import { removeComment } from '@src/redux/actions';
+import { useAppDispatch } from '@src/redux/hooks/hooks.ts';
+import { closeModal, openModal } from '@src/redux/reducers';
 import styled from 'styled-components';
 
 type CommentContainerProps = {
 	className?: string;
 	comment: IComment;
+	postId: string;
 };
 
 const CommentContainer: FC<CommentContainerProps> = ({
 	className,
 	comment,
+	postId,
 }) => {
-	const { author, content, publishedAt } = comment;
+	const { author, content, id, publishedAt } = comment;
+	const dispatch = useAppDispatch();
+	const requestServer = useServerRequest();
+
+	const onCommentRemove = (id: string) => {
+		dispatch(
+			openModal({
+				onCancel: () => dispatch(closeModal()),
+				onConfirm: () => {
+					dispatch(removeComment({ id, postId, requestServer }));
+					dispatch(closeModal());
+				},
+				text: 'Удалить комментарий?',
+			}),
+		);
+	};
+
 	return (
 		<div className={className}>
 			<div className='comment'>
@@ -29,7 +51,11 @@ const CommentContainer: FC<CommentContainerProps> = ({
 				</div>
 				<div className='comment-text'>{content}</div>
 			</div>
-			<Icon id='fa-trash-o' size={'24px'} />
+			<Icon
+				id='fa-trash-o'
+				onClick={() => onCommentRemove(id)}
+				size={'24px'}
+			/>
 		</div>
 	);
 };
