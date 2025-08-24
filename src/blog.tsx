@@ -60,6 +60,7 @@ export const Blog = () => {
 						path={ROUTES.POST}
 					/>
 					<Route element={<Post />} path={ROUTES.POST_ID} />
+					<Route element={<Post />} path={ROUTES.POST_ID_EDIT} />
 				</Routes>
 			</Page>
 			<Footer />

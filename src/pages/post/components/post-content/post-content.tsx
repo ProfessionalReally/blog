@@ -2,6 +2,9 @@ import type { IPost } from '@src/types';
 import type { FC } from 'react';
 
 import { Icon } from '@src/components';
+import { ROUTES } from '@src/constants';
+import { SpecialPanel } from '@src/pages/post/components/special-panel/special-panel.tsx';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 type PostContentContainerProps = {
@@ -13,21 +16,25 @@ const PostContentContainer: FC<PostContentContainerProps> = ({
 	className,
 	post,
 }) => {
+	const navigate = useNavigate();
 	const { content, imageUrl, publishedAt, title } = post;
 	return (
 		<div className={className}>
-			<img alt={title} src={imageUrl} />
+			<img alt={title} height={150} src={imageUrl} width={280} />
 			<h2>{title}</h2>
-			<div className='special-panel'>
-				<div className='published-at'>
-					<Icon id='fa-calendar-o' size={'20px'} />
-					<div>{publishedAt}</div>
-				</div>
-				<div className='buttons'>
-					<Icon id='fa-trash-o' />
-					<Icon id='fa-pencil-square-o' />
-				</div>
-			</div>
+			<SpecialPanel
+				editButton={
+					<Icon
+						id='fa-pencil-square-o'
+						onClick={() => {
+							navigate(
+								ROUTES.POST_ID_EDIT.replace(':id', post.id),
+							);
+						}}
+					/>
+				}
+				publishedAt={publishedAt}
+			/>
 			<div className='post-text'>{content}</div>
 		</div>
 	);
@@ -43,23 +50,8 @@ export const PostContent = styled(PostContentContainer)`
 		margin: 0 20px 20px 0;
 	}
 
-	& .special-panel,
-	.buttons,
-	.published-at {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
-
-	& .special-panel {
-		justify-content: space-between;
-	}
-
-	& .published-at {
-		margin-block: 20px;
-	}
-
 	& .post-text {
 		font-size: 18px;
+		white-space: pre-line;
 	}
 `;

@@ -1,10 +1,12 @@
+import { ROUTES } from '@src/constants';
 import { useServerRequest } from '@src/hooks';
 import { Comments, PostContent } from '@src/pages/post/components';
+import { PostForm } from '@src/pages/post/components';
 import { fetchPost } from '@src/redux/actions';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks';
 import { selectPost } from '@src/redux/selectors';
 import { type FC, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useMatch, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 type PostContainerProps = {
@@ -14,6 +16,7 @@ type PostContainerProps = {
 const PostContainer: FC<PostContainerProps> = ({ className }) => {
 	const dispatch = useAppDispatch();
 	const { id } = useParams<string>();
+	const isEditing = useMatch(ROUTES.POST_ID_EDIT);
 	const requestServer = useServerRequest();
 	const post = useAppSelector(selectPost);
 
@@ -24,8 +27,14 @@ const PostContainer: FC<PostContainerProps> = ({ className }) => {
 
 	return (
 		<div className={className}>
-			<PostContent post={post} />
-			<Comments comments={post.comments} postId={post.id} />
+			{isEditing ? (
+				<PostForm post={post} />
+			) : (
+				<>
+					<PostContent post={post} />
+					<Comments comments={post.comments} postId={post.id} />
+				</>
+			)}
 		</div>
 	);
 };

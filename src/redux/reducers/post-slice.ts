@@ -5,6 +5,7 @@ import {
 	addComment,
 	fetchPost,
 	removeComment,
+	savePost,
 } from '@src/redux/actions/actions.ts';
 
 export type IPostState = {
@@ -39,7 +40,8 @@ const postSlice = createSlice({
 		builder
 			.addCase(fetchPost.fulfilled, updatePost)
 			.addCase(addComment.fulfilled, updatePost)
-			.addCase(removeComment.fulfilled, updatePost);
+			.addCase(removeComment.fulfilled, updatePost)
+			.addCase(savePost.fulfilled, updatePost);
 	},
 	initialState: initialPostState,
 	name: 'post',

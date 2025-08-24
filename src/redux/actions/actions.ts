@@ -6,6 +6,7 @@ import {
 	ADD_COMMENT,
 	FETCH_POST,
 	REMOVE_COMMENT,
+	SAVE_POST,
 } from '@src/redux/actions/actionTypes';
 
 export const fetchPost = createAsyncThunk<
@@ -53,6 +54,25 @@ export const removeComment = createAsyncThunk<
 	}
 >(REMOVE_COMMENT, async ({ id, postId, requestServer }) => {
 	const result = await requestServer('removePostComment', id, postId);
+
+	if (!result || !result.response) {
+		return;
+	}
+
+	return result.response;
+});
+
+export const savePost = createAsyncThunk<
+	IPostState,
+	{
+		content: string;
+		id: string;
+		imageUrl: string;
+		requestServer: ReturnType<typeof useServerRequest>;
+		title: string;
+	}
+>(SAVE_POST, async ({ requestServer, ...newPostData }) => {
+	const result = await requestServer('savePost', newPostData);
 
 	if (!result || !result.response) {
 		return;

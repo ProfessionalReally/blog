@@ -10,6 +10,10 @@ export const fetchPost = async (id: string) => {
 	const commentsWithUsers = comments.map((comment) => {
 		const user = users.find((user) => user.id === comment.authorId);
 
+		if (!user) {
+			return comment;
+		}
+
 		return {
 			...comment,
 			author: user.login,
