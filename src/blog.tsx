@@ -1,6 +1,6 @@
 import { Footer, Header, Modal } from '@src/components';
 import { ROUTES } from '@src/constants';
-import { Auth, Registration, Users } from '@src/pages';
+import { Auth, Main, Registration, Users } from '@src/pages';
 import { Post } from '@src/pages/post/post.tsx';
 import { useAppDispatch } from '@src/redux/hooks/hooks.ts';
 import { setUser } from '@src/redux/reducers';
@@ -48,10 +48,7 @@ export const Blog = () => {
 			<Header />
 			<Page>
 				<Routes>
-					<Route
-						element={<div>Главная страница</div>}
-						path={ROUTES.MAIN}
-					/>
+					<Route element={<Main />} path={ROUTES.MAIN} />
 					<Route element={<Auth />} path={ROUTES.LOGIN} />
 					<Route element={<Registration />} path={ROUTES.REGISTER} />
 					<Route element={<Users />} path={ROUTES.USERS} />

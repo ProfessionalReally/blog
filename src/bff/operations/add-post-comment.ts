@@ -19,7 +19,7 @@ export const addPostComment = async (
 		};
 	}
 
-	await addComment(comment, postId, userId);
+	await addComment(comment, userId, postId);
 
 	const post = await getPost(postId);
 
