@@ -18,7 +18,7 @@ export type IPostState = {
 	title: string;
 };
 
-const initialPostState: IPostState = {
+export const initialPostState: IPostState = {
 	comments: [],
 	content: '',
 	id: '',

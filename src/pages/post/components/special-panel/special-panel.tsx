@@ -43,16 +43,18 @@ export const SpecialPanelContainer: FC<SpecialPanelContainerProps> = ({
 	return (
 		<div className={className}>
 			<div className='published-at'>
-				<Icon id='fa-calendar-o' size={'20px'} />
+				{publishedAt && <Icon id='fa-calendar-o' size={'20px'} />}
 				<div>{publishedAt}</div>
 			</div>
 			<div className='buttons'>
 				{editButton}
-				<Icon
-					id='fa-trash-o'
-					isButton
-					onClick={() => onPostRemove(id)}
-				/>
+				{publishedAt && (
+					<Icon
+						id='fa-trash-o'
+						isButton
+						onClick={() => onPostRemove(id)}
+					/>
+				)}
 			</div>
 		</div>
 	);

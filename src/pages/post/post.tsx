@@ -4,6 +4,7 @@ import { Comments, PostContent } from '@src/pages/post/components';
 import { PostForm } from '@src/pages/post/components';
 import { fetchPost } from '@src/redux/actions';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks';
+import { initialPostState } from '@src/redux/reducers';
 import { selectPost } from '@src/redux/selectors';
 import { type FC, useEffect } from 'react';
 import { useMatch, useParams } from 'react-router-dom';
@@ -17,6 +18,7 @@ const PostContainer: FC<PostContainerProps> = ({ className }) => {
 	const dispatch = useAppDispatch();
 	const { id } = useParams<string>();
 	const isEditing = useMatch(ROUTES.POST_ID_EDIT);
+	const isCreating = useMatch(ROUTES.POST);
 	const requestServer = useServerRequest();
 	const post = useAppSelector(selectPost);
 
@@ -27,8 +29,8 @@ const PostContainer: FC<PostContainerProps> = ({ className }) => {
 
 	return (
 		<div className={className}>
-			{isEditing ? (
-				<PostForm post={post} />
+			{isEditing || isCreating ? (
+				<PostForm post={isCreating ? initialPostState : post} />
 			) : (
 				<>
 					<PostContent post={post} />

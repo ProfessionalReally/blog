@@ -1,4 +1,4 @@
-import { getComments, getUsers, updatePost } from '@src/bff/api';
+import { addPost, getComments, getUsers, updatePost } from '@src/bff/api';
 import { ROLES } from '@src/bff/constants';
 import { sessions } from '@src/bff/sessions.ts';
 
@@ -22,12 +22,26 @@ export const savePost = async (
 		};
 	}
 
-	const post = await updatePost(newPostData);
+	const isCreating = newPostData.id === '';
+
+	const post = isCreating
+		? await addPost(newPostData)
+		: await updatePost(newPostData);
 
 	if (!post) {
 		return {
 			error: 'Не удалось сохранить пост',
 			response: null,
+		};
+	}
+
+	if (isCreating) {
+		return {
+			error: null,
+			response: {
+				...post,
+				comments: [],
+			},
 		};
 	}
 

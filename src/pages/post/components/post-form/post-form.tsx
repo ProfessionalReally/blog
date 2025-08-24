@@ -32,21 +32,27 @@ const PostFormContainer: FC<PostFormContainerProps> = ({ className, post }) => {
 			const title = titleRef.current.value;
 			const content = sanitazeContent(contentRef.current.innerHTML);
 
-			dispatch(savePost({ content, id, imageUrl, requestServer, title }));
-			navigate(ROUTES.POST_ID.replace(':id', id));
+			dispatch(savePost({ content, id, imageUrl, requestServer, title }))
+				.unwrap()
+				.then(({ id }) => {
+					navigate(ROUTES.POST_ID.replace(':id', id));
+				});
+			imageRef.current.value = '';
+			titleRef.current.value = '';
+			contentRef.current.innerHTML = '';
 		}
 	};
 
 	return (
 		<div className={className}>
 			<Input
-				defaultValue={imageUrl}
+				defaultValue={imageUrl || ''}
 				name='imageUrl'
 				placeholder='Изображение...'
 				ref={imageRef}
 			/>
 			<Input
-				defaultValue={title}
+				defaultValue={title || ''}
 				name='title'
 				placeholder='Заголовок...'
 				ref={titleRef}
@@ -54,7 +60,7 @@ const PostFormContainer: FC<PostFormContainerProps> = ({ className, post }) => {
 			<SpecialPanel
 				editButton={<Icon id='fa-floppy-o' isButton onClick={onSave} />}
 				id={id}
-				publishedAt={publishedAt}
+				publishedAt={publishedAt || ''}
 			/>
 			<div
 				className='post-text'
@@ -81,5 +87,7 @@ export const PostForm = styled(PostFormContainer)`
 	& .post-text {
 		font-size: 18px;
 		white-space: pre-line;
+		min-height: 80px;
+		border: 1px #1c1c1c solid;
 	}
 `;

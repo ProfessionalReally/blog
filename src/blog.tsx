@@ -55,10 +55,7 @@ export const Blog = () => {
 					<Route element={<Auth />} path={ROUTES.LOGIN} />
 					<Route element={<Registration />} path={ROUTES.REGISTER} />
 					<Route element={<Users />} path={ROUTES.USERS} />
-					<Route
-						element={<div>Новая статья</div>}
-						path={ROUTES.POST}
-					/>
+					<Route element={<Post />} path={ROUTES.POST} />
 					<Route element={<Post />} path={ROUTES.POST_ID} />
 					<Route element={<Post />} path={ROUTES.POST_ID_EDIT} />
 				</Routes>
