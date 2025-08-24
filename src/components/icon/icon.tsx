@@ -6,6 +6,7 @@ type IconContainerType = {
 	className?: string;
 	disabled?: boolean;
 	id?: string;
+	isButton?: boolean;
 	margin?: string;
 	onClick?: () => void;
 	size?: string;
@@ -21,7 +22,8 @@ export const Icon = styled(IconContainer)`
 	font-size: ${({ size = '24px' }) => size};
 	margin: ${({ margin = '0' }) => margin};
 	color: ${({ disabled }) => (disabled ? '#ccc' : '#1c1c1c')};
-	cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+	cursor: ${({ disabled, isButton }) =>
+		disabled || !isButton ? 'default' : 'pointer'};
 	display: flex;
 	justify-content: center;
 	align-items: center;

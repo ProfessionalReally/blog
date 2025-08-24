@@ -71,12 +71,14 @@ const UserRowContainer: FC<UserRowProps> = ({
 					<Icon
 						disabled={isSaveButtonDisabled}
 						id='fa-floppy-o'
+						isButton
 						onClick={() => onRoleSave(id, selectedRoleId)}
 					/>
 				</RoleColumn>
 			</TableRow>
 			<Icon
 				id='fa-trash-o'
+				isButton
 				margin={'0 0 0 10px'}
 				onClick={() => {
 					onUserRemove(id);

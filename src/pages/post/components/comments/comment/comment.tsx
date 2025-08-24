@@ -53,6 +53,7 @@ const CommentContainer: FC<CommentContainerProps> = ({
 			</div>
 			<Icon
 				id='fa-trash-o'
+				isButton
 				onClick={() => onCommentRemove(id)}
 				size={'24px'}
 			/>

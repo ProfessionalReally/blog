@@ -47,6 +47,7 @@ const CommentsContainer: FC<CommentsContainerProps> = ({
 				<div className='published-at'>
 					<Icon
 						id='fa-paper-plane-o'
+						isButton
 						onClick={() =>
 							onNewCommentAdd(postId, userId, newComment)
 						}
@@ -55,13 +56,15 @@ const CommentsContainer: FC<CommentsContainerProps> = ({
 				</div>
 			</div>
 			<div className='comments'>
-				{comments.map((comment) => (
-					<Comment
-						comment={comment}
-						key={comment.id}
-						postId={postId}
-					/>
-				))}
+				{comments &&
+					comments.length > 0 &&
+					comments.map((comment) => (
+						<Comment
+							comment={comment}
+							key={comment.id}
+							postId={postId}
+						/>
+					))}
 			</div>
 		</div>
 	);

@@ -119,18 +119,10 @@
       "published_at": "2025-06-10"
     }
   ],
-  "comments": [
-    {
-      "author_id": "1",
-      "content": "asdsadasdasdasda",
-      "post_id": "67zkMKi",
-      "published_at": "2146-04-13 02:45",
-      "id": 1
-    }
-  ],
+  "comments": [],
   "sessions": [
     {
-      "hash": "dfcl9scveid",
+      "hash": "ds4g17p6ofh",
       "user": {
         "id": "67zkMKi",
         "login": "anton1234",

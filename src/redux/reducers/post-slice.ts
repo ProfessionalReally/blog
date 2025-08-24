@@ -5,6 +5,7 @@ import {
 	addComment,
 	fetchPost,
 	removeComment,
+	removePost,
 	savePost,
 } from '@src/redux/actions/actions.ts';
 
@@ -41,11 +42,15 @@ const postSlice = createSlice({
 			.addCase(fetchPost.fulfilled, updatePost)
 			.addCase(addComment.fulfilled, updatePost)
 			.addCase(removeComment.fulfilled, updatePost)
-			.addCase(savePost.fulfilled, updatePost);
+			.addCase(savePost.fulfilled, updatePost)
+			.addCase(removePost.fulfilled, updatePost);
 	},
 	initialState: initialPostState,
 	name: 'post',
-	reducers: {},
+	reducers: {
+		resetPost: () => initialPostState,
+	},
 });
 
 export const postReducer = postSlice.reducer;
+export const { resetPost } = postSlice.actions;

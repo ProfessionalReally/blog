@@ -59,6 +59,7 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 						<Username>{login}</Username>
 						<Icon
 							id={'fa-sign-out'}
+							isButton
 							onClick={() => onLogout(session)}
 							size={'28px'}
 						/>
@@ -66,12 +67,16 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 				)}
 			</Aligned>
 			<Aligned>
-				<Icon id={'fa-backward'} onClick={() => navigate(-1)} />
+				<Icon
+					id={'fa-backward'}
+					isButton
+					onClick={() => navigate(-1)}
+				/>
 				<Link to={ROUTES.POST}>
-					<Icon id={'fa-file-text-o'} />
+					<Icon id={'fa-file-text-o'} isButton />
 				</Link>
 				<Link to={ROUTES.USERS}>
-					<Icon id={'fa-users'} />
+					<Icon id={'fa-users'} isButton />
 				</Link>
 			</Aligned>
 		</div>

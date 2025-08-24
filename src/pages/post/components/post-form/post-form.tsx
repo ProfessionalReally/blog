@@ -52,7 +52,8 @@ const PostFormContainer: FC<PostFormContainerProps> = ({ className, post }) => {
 				ref={titleRef}
 			/>
 			<SpecialPanel
-				editButton={<Icon id='fa-floppy-o' onClick={onSave} />}
+				editButton={<Icon id='fa-floppy-o' isButton onClick={onSave} />}
+				id={id}
 				publishedAt={publishedAt}
 			/>
 			<div

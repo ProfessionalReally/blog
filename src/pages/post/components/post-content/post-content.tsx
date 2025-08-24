@@ -17,7 +17,7 @@ const PostContentContainer: FC<PostContentContainerProps> = ({
 	post,
 }) => {
 	const navigate = useNavigate();
-	const { content, imageUrl, publishedAt, title } = post;
+	const { content, id, imageUrl, publishedAt, title } = post;
 	return (
 		<div className={className}>
 			<img alt={title} height={150} src={imageUrl} width={280} />
@@ -26,6 +26,7 @@ const PostContentContainer: FC<PostContentContainerProps> = ({
 				editButton={
 					<Icon
 						id='fa-pencil-square-o'
+						isButton
 						onClick={() => {
 							navigate(
 								ROUTES.POST_ID_EDIT.replace(':id', post.id),
@@ -33,6 +34,7 @@ const PostContentContainer: FC<PostContentContainerProps> = ({
 						}}
 					/>
 				}
+				id={id}
 				publishedAt={publishedAt}
 			/>
 			<div className='post-text'>{content}</div>
