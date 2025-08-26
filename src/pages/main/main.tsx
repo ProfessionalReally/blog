@@ -1,8 +1,9 @@
+import { PAGINATION_LIMIT } from '@src/bff/constants';
 import { useServerRequest } from '@src/hooks';
 import { type FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { PostCard } from './components';
+import { Pagination, PostCard } from './components';
 
 type MainContainerProps = {
 	className?: string;
@@ -10,16 +11,18 @@ type MainContainerProps = {
 
 const MainContainer: FC<MainContainerProps> = ({ className }) => {
 	const [posts, setPosts] = useState([]);
+	const [page, setPage] = useState(1);
+	const [lastPage, setLastPage] = useState(1);
 
 	const requestServer = useServerRequest();
 
 	useEffect(() => {
-		requestServer('fetchPosts').then((postsRes) => {
+		requestServer('fetchPosts', page, PAGINATION_LIMIT).then((postsRes) => {
 			if (!postsRes || !postsRes.response || postsRes.error) return;
-
-			setPosts(postsRes.response);
+			setPosts(postsRes.response.posts);
+			setLastPage(postsRes.response.lastPage);
 		});
-	}, [requestServer]);
+	}, [page, requestServer]);
 
 	return (
 		<div className={className}>
@@ -37,15 +40,25 @@ const MainContainer: FC<MainContainerProps> = ({ className }) => {
 					),
 				)}
 			</div>
+			<Pagination lastPage={lastPage} page={page} setPage={setPage} />
 		</div>
 	);
 };
 
 export const Main = styled(MainContainer)`
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+
 	& .post-list {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 20px;
 		padding: 20px;
+		height: fit-content;
+	}
+
+	& > ${Pagination} {
+		margin-top: auto;
 	}
 `;

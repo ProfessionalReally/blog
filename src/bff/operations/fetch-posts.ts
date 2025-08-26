@@ -3,14 +3,20 @@ import type { IPost } from '@src/types';
 import { getComments, getPosts } from '@src/bff/api';
 import { getCommentsCount } from '@src/bff/utils';
 
-export const fetchPosts = async () => {
-	const [posts, comments] = await Promise.all([getPosts(), getComments()]);
+export const fetchPosts = async (page: number, limit: number) => {
+	const [{ lastPage, posts }, comments] = await Promise.all([
+		getPosts(page, limit),
+		getComments(),
+	]);
 
 	return {
 		error: null,
-		response: posts.map((post: IPost) => ({
-			...post,
-			commentsCount: getCommentsCount(comments, post.id),
-		})),
+		response: {
+			lastPage,
+			posts: posts.map((post: IPost) => ({
+				...post,
+				commentsCount: getCommentsCount(comments, post.id),
+			})),
+		},
 	};
 };
