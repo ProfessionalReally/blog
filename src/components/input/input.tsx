@@ -1,24 +1,36 @@
 import type { UseFormRegister } from 'react-hook-form';
 
 import { forwardRef } from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
 
 type InputProps = {
 	className?: string;
 	defaultValue?: string;
-	name: string;
+	name?: string;
+	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	placeholder?: string;
 	register?: UseFormRegister<any>;
 	type?: string;
+	value?: string;
 	width?: string;
 };
 
 const InputContainer = forwardRef<HTMLInputElement, InputProps>(
 	(
-		{ className, defaultValue, name, placeholder, register, type = 'text' },
+		{
+			className,
+			defaultValue,
+			name,
+			onChange,
+			placeholder,
+			register,
+			type = 'text',
+			value,
+		},
 		ref,
 	) => {
-		if (register) {
+		if (register && name) {
 			return (
 				<input
 					className={className}
@@ -34,9 +46,11 @@ const InputContainer = forwardRef<HTMLInputElement, InputProps>(
 			<input
 				className={className}
 				defaultValue={defaultValue}
+				onChange={onChange}
 				placeholder={placeholder}
 				ref={ref}
 				type={type}
+				value={value}
 			/>
 		);
 	},
