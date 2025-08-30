@@ -1,4 +1,5 @@
-import { ROUTES } from '@src/constants';
+import { Error, PrivateContent } from '@src/components';
+import { ROLES, ROUTES } from '@src/constants';
 import { useServerRequest } from '@src/hooks';
 import { Comments, PostContent } from '@src/pages/post/components';
 import { PostForm } from '@src/pages/post/components';
@@ -6,7 +7,7 @@ import { fetchPost } from '@src/redux/actions';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks';
 import { initialPostState } from '@src/redux/reducers';
 import { selectPost } from '@src/redux/selectors';
-import { type FC, useEffect } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useMatch, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -16,6 +17,8 @@ type PostContainerProps = {
 
 const PostContainer: FC<PostContainerProps> = ({ className }) => {
 	const dispatch = useAppDispatch();
+	const [error, setError] = useState<null | string>(null);
+	const [isLoading, setIsLoading] = useState(true);
 	const { id } = useParams<string>();
 	const isEditing = useMatch(ROUTES.POST_ID_EDIT);
 	const isCreating = useMatch(ROUTES.POST);
@@ -23,14 +26,33 @@ const PostContainer: FC<PostContainerProps> = ({ className }) => {
 	const post = useAppSelector(selectPost);
 
 	useEffect(() => {
-		if (!id) return;
-		dispatch(fetchPost({ id, requestServer }));
+		if (!id) {
+			setIsLoading(false);
+			return;
+		}
+		dispatch(fetchPost({ id, requestServer }))
+			.unwrap()
+			.then(() => {
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				if (error) {
+					setError(error.message);
+					setIsLoading(false);
+				}
+			});
 	}, [dispatch, id, requestServer]);
+
+	if (isLoading) return <div>Загрузка...</div>;
 
 	return (
 		<div className={className}>
-			{isEditing || isCreating ? (
-				<PostForm post={isCreating ? initialPostState : post} />
+			{error ? (
+				<Error error={error} />
+			) : isEditing || isCreating ? (
+				<PrivateContent accessRoles={[ROLES.ADMIN]}>
+					<PostForm post={isCreating ? initialPostState : post} />
+				</PrivateContent>
 			) : (
 				<>
 					<PostContent post={post} />

@@ -1,30 +1,37 @@
 import { getComments, getPost, getUsers } from '@src/bff/api';
 
 export const fetchPost = async (id: string) => {
-	const post = await getPost(id);
+	try {
+		const post = await getPost(id);
 
-	const comments = await getComments(id);
+		const comments = await getComments(id);
 
-	const users = await getUsers();
+		const users = await getUsers();
 
-	const commentsWithUsers = comments.map((comment) => {
-		const user = users.find((user) => user.id === comment.authorId);
+		const commentsWithUsers = comments.map((comment) => {
+			const user = users.find((user) => user.id === comment.authorId);
 
-		if (!user) {
-			return comment;
-		}
+			if (!user) {
+				return comment;
+			}
+
+			return {
+				...comment,
+				author: user.login,
+			};
+		});
 
 		return {
-			...comment,
-			author: user.login,
+			error: null,
+			response: {
+				...post,
+				comments: commentsWithUsers,
+			},
 		};
-	});
-
-	return {
-		error: null,
-		response: {
-			...post,
-			comments: commentsWithUsers,
-		},
-	};
+	} catch (error) {
+		return {
+			error,
+			response: null,
+		};
+	}
 };

@@ -1,6 +1,9 @@
-import { Content } from '@src/components';
+import { PrivateContent } from '@src/components';
 import { ROLES } from '@src/constants';
 import { useServerRequest } from '@src/hooks';
+import { useAppSelector } from '@src/redux/hooks/hooks.ts';
+import { selectUserRole } from '@src/redux/selectors';
+import { checkAccess } from '@src/utils';
 import { type FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -24,14 +27,21 @@ const UsersContainer: FC<UsersContainerProps> = ({ className }) => {
 	const [error, setError] = useState<null | string>(null);
 
 	const requestServer = useServerRequest();
+	const userRole = useAppSelector(selectUserRole);
 
 	const onUserRemove = (id: string) => {
+		if (!checkAccess([ROLES.ADMIN], userRole)) {
+			return;
+		}
 		requestServer('removeUser', id).then(() =>
 			setShouldUpdate(!shouldUpdate),
 		);
 	};
 
 	useEffect(() => {
+		if (!checkAccess([ROLES.ADMIN], userRole)) {
+			return;
+		}
 		Promise.all([
 			requestServer('fetchRoles'),
 			requestServer('fetchUsers'),
@@ -46,11 +56,11 @@ const UsersContainer: FC<UsersContainerProps> = ({ className }) => {
 			setUsers(usersRes.response);
 		});
 		setShouldUpdate(false);
-	}, [requestServer, shouldUpdate]);
+	}, [requestServer, shouldUpdate, userRole]);
 
 	return (
-		<div className={className}>
-			<Content error={error}>
+		<PrivateContent accessRoles={[ROLES.ADMIN]} error={error}>
+			<div className={className}>
 				<h2>Пользователи</h2>
 				<StyledTable>
 					<TableRow>
@@ -76,8 +86,8 @@ const UsersContainer: FC<UsersContainerProps> = ({ className }) => {
 						))}
 					</div>
 				</StyledTable>
-			</Content>
-		</div>
+			</div>
+		</PrivateContent>
 	);
 };
 

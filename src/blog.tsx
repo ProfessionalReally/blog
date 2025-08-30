@@ -1,5 +1,5 @@
-import { Footer, Header, Modal } from '@src/components';
-import { ROUTES } from '@src/constants';
+import { Error, Footer, Header, Modal } from '@src/components';
+import { ERROR, ROUTES } from '@src/constants';
 import { Auth, Main, Registration, Users } from '@src/pages';
 import { Post } from '@src/pages/post/post.tsx';
 import { useAppDispatch } from '@src/redux/hooks/hooks.ts';
@@ -55,6 +55,10 @@ export const Blog = () => {
 					<Route element={<Post />} path={ROUTES.POST} />
 					<Route element={<Post />} path={ROUTES.POST_ID} />
 					<Route element={<Post />} path={ROUTES.POST_ID_EDIT} />
+					<Route
+						element={<Error error={ERROR.PAGE_NOT_EXIST} />}
+						path={ROUTES.ALL}
+					/>
 				</Routes>
 			</Page>
 			<Footer />

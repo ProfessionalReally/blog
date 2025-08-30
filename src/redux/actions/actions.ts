@@ -1,6 +1,7 @@
 import type { IPostState } from '@src/redux/reducers';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ERROR } from '@src/constants';
 import { useServerRequest } from '@src/hooks';
 import {
 	ADD_COMMENT,
@@ -12,15 +13,22 @@ import {
 
 export const fetchPost = createAsyncThunk<
 	IPostState,
-	{ id: string; requestServer: ReturnType<typeof useServerRequest> }
->(FETCH_POST, async ({ id, requestServer }) => {
-	const result = await requestServer('fetchPost', id);
-
-	if (!result || !result.response) {
-		return;
+	{ id: string; requestServer: ReturnType<typeof useServerRequest> },
+	{
+		rejectValue: string;
 	}
+>(FETCH_POST, async ({ id, requestServer }, { rejectWithValue }) => {
+	try {
+		const result = await requestServer('fetchPost', id);
 
-	return result.response;
+		if (!result || !result.response) {
+			return rejectWithValue(result?.error ?? ERROR.SERVER_ERROR);
+		}
+
+		return result.response;
+	} catch (error) {
+		return rejectWithValue(error.message);
+	}
 });
 
 export const addComment = createAsyncThunk<
