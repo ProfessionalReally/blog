@@ -2,10 +2,13 @@ import type { IComment } from '@src/types';
 import type { FC } from 'react';
 
 import { Icon } from '@src/components';
+import { ROLES } from '@src/constants';
 import { useServerRequest } from '@src/hooks';
 import { removeComment } from '@src/redux/actions';
-import { useAppDispatch } from '@src/redux/hooks/hooks.ts';
+import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks.ts';
 import { closeModal, openModal } from '@src/redux/reducers';
+import { selectUserRole } from '@src/redux/selectors';
+import { checkAccess } from '@src/utils';
 import styled from 'styled-components';
 
 type CommentContainerProps = {
@@ -22,6 +25,7 @@ const CommentContainer: FC<CommentContainerProps> = ({
 	const { author, content, id, publishedAt } = comment;
 	const dispatch = useAppDispatch();
 	const requestServer = useServerRequest();
+	const userRole = useAppSelector(selectUserRole);
 
 	const onCommentRemove = (id: string) => {
 		dispatch(
@@ -35,6 +39,8 @@ const CommentContainer: FC<CommentContainerProps> = ({
 			}),
 		);
 	};
+
+	const isAccess = checkAccess([ROLES.ADMIN, ROLES.MODERATOR], userRole);
 
 	return (
 		<div className={className}>
@@ -51,12 +57,14 @@ const CommentContainer: FC<CommentContainerProps> = ({
 				</div>
 				<div className='comment-text'>{content}</div>
 			</div>
-			<Icon
-				id='fa-trash-o'
-				isButton
-				onClick={() => onCommentRemove(id)}
-				size={'24px'}
-			/>
+			{isAccess && (
+				<Icon
+					id='fa-trash-o'
+					isButton
+					onClick={() => onCommentRemove(id)}
+					size={'24px'}
+				/>
+			)}
 		</div>
 	);
 };

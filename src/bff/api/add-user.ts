@@ -11,7 +11,7 @@ export const addUser = async ({ login, password }: IUserAuth) => {
 			login,
 			password,
 			registered_at: generateRandomDate(),
-			role_id: ROLES.ADMIN,
+			role_id: ROLES.READER,
 		},
 	);
 	const { data } = await response;

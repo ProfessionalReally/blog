@@ -1,9 +1,11 @@
 import { Icon } from '@src/components';
-import { ROUTES } from '@src/constants';
+import { ROLES, ROUTES } from '@src/constants';
 import { useServerRequest } from '@src/hooks';
 import { removePost } from '@src/redux/actions';
-import { useAppDispatch } from '@src/redux/hooks/hooks.ts';
+import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks.ts';
 import { closeModal, openModal } from '@src/redux/reducers';
+import { selectUserRole } from '@src/redux/selectors';
+import { checkAccess } from '@src/utils';
 import { type FC } from 'react';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -25,6 +27,7 @@ export const SpecialPanelContainer: FC<SpecialPanelContainerProps> = ({
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const requestServer = useServerRequest();
+	const userRole = useAppSelector(selectUserRole);
 
 	const onPostRemove = (id: string) => {
 		dispatch(
@@ -40,22 +43,26 @@ export const SpecialPanelContainer: FC<SpecialPanelContainerProps> = ({
 		);
 	};
 
+	const isAdmin = checkAccess([ROLES.ADMIN], userRole);
+
 	return (
 		<div className={className}>
 			<div className='published-at'>
 				{publishedAt && <Icon id='fa-calendar-o' size={'20px'} />}
 				<div>{publishedAt}</div>
 			</div>
-			<div className='buttons'>
-				{editButton}
-				{publishedAt && (
-					<Icon
-						id='fa-trash-o'
-						isButton
-						onClick={() => onPostRemove(id)}
-					/>
-				)}
-			</div>
+			{isAdmin && (
+				<div className='buttons'>
+					{editButton}
+					{publishedAt && (
+						<Icon
+							id='fa-trash-o'
+							isButton
+							onClick={() => onPostRemove(id)}
+						/>
+					)}
+				</div>
+			)}
 		</div>
 	);
 };

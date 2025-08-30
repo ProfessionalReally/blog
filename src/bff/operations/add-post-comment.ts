@@ -1,6 +1,7 @@
-import { addComment, getComments, getPost } from '@src/bff/api';
+import { addComment, getPost } from '@src/bff/api';
 import { ROLES } from '@src/bff/constants';
 import { sessions } from '@src/bff/sessions.ts';
+import { getPostCommentsWithAuthor } from '@src/bff/utils';
 
 export const addPostComment = async (
 	hash: string,
@@ -23,13 +24,13 @@ export const addPostComment = async (
 
 	const post = await getPost(postId);
 
-	const comments = await getComments(postId);
+	const commentsWithUsers = await getPostCommentsWithAuthor(postId);
 
 	return {
 		error: null,
 		response: {
 			...post,
-			comments,
+			comments: commentsWithUsers,
 		},
 	};
 };

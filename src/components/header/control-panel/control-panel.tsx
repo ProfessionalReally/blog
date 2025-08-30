@@ -10,6 +10,7 @@ import {
 	selectUserRole,
 	selectUserSession,
 } from '@src/redux/selectors';
+import { checkAccess } from '@src/utils';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -47,6 +48,8 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 		sessionStorage.removeItem('userData');
 	};
 
+	const isAdmin = checkAccess([ROLES.ADMIN], roleId);
+
 	return (
 		<div className={className}>
 			<Aligned>
@@ -72,12 +75,16 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 					isButton
 					onClick={() => navigate(-1)}
 				/>
-				<Link to={ROUTES.POST}>
-					<Icon id={'fa-file-text-o'} isButton />
-				</Link>
-				<Link to={ROUTES.USERS}>
-					<Icon id={'fa-users'} isButton />
-				</Link>
+				{isAdmin && (
+					<>
+						<Link to={ROUTES.POST}>
+							<Icon id={'fa-file-text-o'} isButton />
+						</Link>
+						<Link to={ROUTES.USERS}>
+							<Icon id={'fa-users'} isButton />
+						</Link>
+					</>
+				)}
 			</Aligned>
 		</div>
 	);

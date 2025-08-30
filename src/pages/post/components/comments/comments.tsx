@@ -1,10 +1,11 @@
 import type { IComment } from '@src/types';
 
 import { Icon } from '@src/components';
+import { ROLES } from '@src/constants';
 import { useServerRequest } from '@src/hooks';
 import { addComment } from '@src/redux/actions';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks.ts';
-import { selectUserId } from '@src/redux/selectors';
+import { selectUserId, selectUserRole } from '@src/redux/selectors';
 import { type FC, useState } from 'react';
 import styled from 'styled-components';
 
@@ -25,6 +26,7 @@ const CommentsContainer: FC<CommentsContainerProps> = ({
 	const userId = useAppSelector(selectUserId);
 	const dispatch = useAppDispatch();
 	const requestServer = useServerRequest();
+	const userRole = useAppSelector(selectUserRole);
 
 	const onNewCommentAdd = async (
 		postId: string,
@@ -36,25 +38,29 @@ const CommentsContainer: FC<CommentsContainerProps> = ({
 		setNewComment('');
 	};
 
+	const isGuest = userRole === ROLES.GUEST;
+
 	return (
 		<div className={className}>
-			<div className='new-comment'>
-				<textarea
-					onChange={({ target }) => setNewComment(target.value)}
-					placeholder='Комментарий...'
-					value={newComment}
-				/>
-				<div className='published-at'>
-					<Icon
-						id='fa-paper-plane-o'
-						isButton
-						onClick={() =>
-							onNewCommentAdd(postId, userId, newComment)
-						}
-						size={'20px'}
+			{!isGuest && (
+				<div className='new-comment'>
+					<textarea
+						onChange={({ target }) => setNewComment(target.value)}
+						placeholder='Комментарий...'
+						value={newComment}
 					/>
+					<div className='published-at'>
+						<Icon
+							id='fa-paper-plane-o'
+							isButton
+							onClick={() =>
+								onNewCommentAdd(postId, userId, newComment)
+							}
+							size={'20px'}
+						/>
+					</div>
 				</div>
-			</div>
+			)}
 			<div className='comments'>
 				{comments &&
 					comments.length > 0 &&

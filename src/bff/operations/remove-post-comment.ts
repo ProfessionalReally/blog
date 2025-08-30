@@ -1,6 +1,7 @@
-import { deleteComment, getComments, getPost } from '@src/bff/api';
+import { deleteComment, getPost } from '@src/bff/api';
 import { ROLES } from '@src/bff/constants';
 import { sessions } from '@src/bff/sessions.ts';
+import { getPostCommentsWithAuthor } from '@src/bff/utils';
 
 export const removePostComment = async (
 	hash: string,
@@ -22,13 +23,13 @@ export const removePostComment = async (
 
 	const post = await getPost(postId);
 
-	const comments = await getComments(postId);
+	const commentsWithUsers = await getPostCommentsWithAuthor(postId);
 
 	return {
 		error: null,
 		response: {
 			...post,
-			comments,
+			comments: commentsWithUsers,
 		},
 	};
 };

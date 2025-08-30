@@ -1,25 +1,11 @@
-import { getComments, getPost, getUsers } from '@src/bff/api';
+import { getPost } from '@src/bff/api';
+import { getPostCommentsWithAuthor } from '@src/bff/utils';
 
 export const fetchPost = async (id: string) => {
 	try {
 		const post = await getPost(id);
 
-		const comments = await getComments(id);
-
-		const users = await getUsers();
-
-		const commentsWithUsers = comments.map((comment) => {
-			const user = users.find((user) => user.id === comment.authorId);
-
-			if (!user) {
-				return comment;
-			}
-
-			return {
-				...comment,
-				author: user.login,
-			};
-		});
+		const commentsWithUsers = await getPostCommentsWithAuthor(id);
 
 		return {
 			error: null,
