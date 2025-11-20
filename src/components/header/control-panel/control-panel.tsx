@@ -10,7 +10,7 @@ import {
 	selectUserRole,
 	selectUserSession,
 } from '@src/redux/selectors';
-import { checkAccess } from '@src/utils';
+import { checkAccess, request } from '@src/utils';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -40,10 +40,12 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 	const navigate = useNavigate();
 	const roleId = useAppSelector(selectUserRole);
 	const login = useAppSelector(selectUserLogin);
-	const session = useAppSelector(selectUserSession);
 
-	const onLogout = (session: string) => {
-		server.logout(session);
+	const onLogout = () => {
+		request<void, void>({
+			method: 'post',
+			url: '/auth/logout',
+		});
 		dispatch(logout());
 		sessionStorage.removeItem('userData');
 	};
@@ -63,7 +65,7 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 						<Icon
 							id={'fa-sign-out'}
 							isButton
-							onClick={() => onLogout(session)}
+							onClick={() => onLogout()}
 							size={'28px'}
 						/>
 					</>

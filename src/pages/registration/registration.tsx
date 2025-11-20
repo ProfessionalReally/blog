@@ -1,11 +1,13 @@
+import type { IUserAuth } from '@src/types';
+
 import { yupResolver } from '@hookform/resolvers/yup';
-import { server } from '@src/bff';
 import { Button } from '@src/components';
 import { AuthFormError } from '@src/components';
 import { Input } from '@src/components/input/input';
 import { ROUTES } from '@src/constants';
 import { useAppDispatch } from '@src/redux/hooks/hooks';
 import { type IUserState, setUser } from '@src/redux/reducers';
+import { request } from '@src/utils';
 import { type FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -69,21 +71,25 @@ const RegistrationContainer: FC<RegistrationFormProps> = ({ className }) => {
 
 	const onSubmit = async ({ login, password }: RegistrationFormData) => {
 		try {
-			const { error, response } = await server.register({
-				login,
-				password,
+			const { data, error } = await request<IUserState, IUserAuth>({
+				data: {
+					login,
+					password,
+				},
+				method: 'post',
+				url: '/auth/register',
 			});
 
-			if (error || !response) {
+			if (error || !data) {
 				setServerError(`Ошибка запроса: ${error}`);
 				return;
 			}
 
 			const userPayload: IUserState = {
-				id: response.id,
-				login: response.login,
-				roleId: response.role_id,
-				session: response.session,
+				id: data.id,
+				login: data.login,
+				registeredAt: data.registeredAt,
+				roleId: data.roleId,
 			};
 
 			await dispatch(setUser(userPayload));

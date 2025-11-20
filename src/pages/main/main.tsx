@@ -1,6 +1,7 @@
 import { PAGINATION_LIMIT } from '@src/bff/constants';
 import { useServerRequest } from '@src/hooks';
 import { debounce } from '@src/pages/main/utils';
+import { request } from '@src/utils';
 import { type FC, useEffect, useMemo, useState } from 'react';
 import * as React from 'react';
 import styled from 'styled-components';
@@ -21,14 +22,19 @@ const MainContainer: FC<MainContainerProps> = ({ className }) => {
 	const requestServer = useServerRequest();
 
 	useEffect(() => {
-		requestServer('fetchPosts', page, PAGINATION_LIMIT, searchPhrase).then(
-			(postsRes) => {
-				if (!postsRes || !postsRes.response || postsRes.error) return;
-				setPosts(postsRes.response.posts);
-				setLastPage(postsRes.response.lastPage);
+		request({
+			method: 'get',
+			params: {
+				limit: PAGINATION_LIMIT,
+				page: page,
+				search: searchPhrase,
 			},
-		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+			url: '/posts',
+		}).then((postsRes) => {
+			if (!postsRes || !postsRes.response || postsRes.error) return;
+			setPosts(postsRes.response.posts);
+			setLastPage(postsRes.response.lastPage);
+		});
 	}, [page, requestServer, shouldSearch]);
 
 	const debounceFn = (shouldSearch: boolean) => {
