@@ -2,7 +2,6 @@ import type { IPost } from '@src/types';
 
 import { Icon, Input } from '@src/components';
 import { ROUTES } from '@src/constants';
-import { useServerRequest } from '@src/hooks';
 import { sanitazeContent } from '@src/pages/post/components/post-form/utils';
 import { SpecialPanel } from '@src/pages/post/components/special-panel/special-panel.tsx';
 import { savePost } from '@src/redux/actions';
@@ -20,7 +19,6 @@ const PostFormContainer: FC<PostFormContainerProps> = ({ className, post }) => {
 	const { content, id, imageUrl, publishedAt, title } = post;
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const requestServer = useServerRequest();
 
 	const imageRef = useRef<HTMLInputElement>(null);
 	const titleRef = useRef<HTMLInputElement>(null);
@@ -32,7 +30,7 @@ const PostFormContainer: FC<PostFormContainerProps> = ({ className, post }) => {
 			const title = titleRef.current.value;
 			const content = sanitazeContent(contentRef.current.innerHTML);
 
-			dispatch(savePost({ content, id, imageUrl, requestServer, title }))
+			dispatch(savePost({ content, id, imageUrl, title }))
 				.unwrap()
 				.then(({ id }) => {
 					navigate(ROUTES.POST_ID.replace(':id', id));

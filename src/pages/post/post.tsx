@@ -1,8 +1,6 @@
 import { Error, PrivateContent } from '@src/components';
 import { ROLES, ROUTES } from '@src/constants';
-import { useServerRequest } from '@src/hooks';
-import { Comments, PostContent } from '@src/pages/post/components';
-import { PostForm } from '@src/pages/post/components';
+import { Comments, PostContent, PostForm } from '@src/pages/post/components';
 import { fetchPost } from '@src/redux/actions';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks';
 import { initialPostState } from '@src/redux/reducers';
@@ -22,7 +20,6 @@ const PostContainer: FC<PostContainerProps> = ({ className }) => {
 	const { id } = useParams<string>();
 	const isEditing = useMatch(ROUTES.POST_ID_EDIT);
 	const isCreating = useMatch(ROUTES.POST);
-	const requestServer = useServerRequest();
 	const post = useAppSelector(selectPost);
 
 	useEffect(() => {
@@ -30,7 +27,7 @@ const PostContainer: FC<PostContainerProps> = ({ className }) => {
 			setIsLoading(false);
 			return;
 		}
-		dispatch(fetchPost({ id, requestServer }))
+		dispatch(fetchPost({ id }))
 			.unwrap()
 			.then(() => {
 				setIsLoading(false);
@@ -41,7 +38,7 @@ const PostContainer: FC<PostContainerProps> = ({ className }) => {
 					setIsLoading(false);
 				}
 			});
-	}, [dispatch, id, requestServer]);
+	}, [dispatch, id]);
 
 	if (isLoading) return <div>Загрузка...</div>;
 

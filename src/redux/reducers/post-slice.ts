@@ -40,10 +40,16 @@ const postSlice = createSlice({
 	extraReducers(builder) {
 		builder
 			.addCase(fetchPost.fulfilled, updatePost)
-			.addCase(addComment.fulfilled, updatePost)
-			.addCase(removeComment.fulfilled, updatePost)
+			.addCase(addComment.fulfilled, (state, action) => {
+				state.comments.push(action.payload);
+			})
+			.addCase(removeComment.fulfilled, (state, action) => {
+				state.comments = state.comments.filter(
+					(comment) => comment.id !== action.payload.id,
+				);
+			})
 			.addCase(savePost.fulfilled, updatePost)
-			.addCase(removePost.fulfilled, updatePost);
+			.addCase(removePost.fulfilled, () => initialPostState);
 	},
 	initialState: initialPostState,
 	name: 'post',

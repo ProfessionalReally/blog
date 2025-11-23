@@ -1,19 +1,17 @@
+import type { IUser, IUserRole } from '@src/types';
+
 import { Icon } from '@src/components';
-import { useServerRequest } from '@src/hooks';
-import { type FC, useState } from 'react';
+import { request } from '@src/utils';
 import * as React from 'react';
+import { type FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { TableRow } from '../table-row/table-row';
 
-type UserRowProps = {
+type UserRowProps = IUser & {
 	className?: string;
-	id: string;
-	login: string;
 	onUserRemove: (id: string) => void;
-	registeredAt: string;
-	roleId: string;
-	roles: { id: string; name: string }[];
+	roles: IUserRole[];
 };
 
 const RoleColumn = styled.div`
@@ -35,17 +33,21 @@ const UserRowContainer: FC<UserRowProps> = ({
 	roleId: userRoleId,
 	roles,
 }) => {
-	const [initialRoleId, setInitialRoleId] = useState<string>(userRoleId);
-	const [selectedRoleId, setSelectedRoleId] = useState<string>(userRoleId);
-
-	const requestServer = useServerRequest();
+	const [initialRoleId, setInitialRoleId] = useState(userRoleId);
+	const [selectedRoleId, setSelectedRoleId] = useState(userRoleId);
 
 	const onRoleChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-		setSelectedRoleId(target.value);
+		setSelectedRoleId(Number(target.value));
 	};
 
-	const onRoleSave = (id: string, newUserRoleId: string) => {
-		requestServer('updateUserRole', id, newUserRoleId).then(() => {
+	const onRoleSave = (id: string, newUserRoleId: number) => {
+		request<void, { roleId: number }>({
+			data: {
+				roleId: newUserRoleId,
+			},
+			method: 'PATCH',
+			url: `/users/${id}`,
+		}).then(() => {
 			setInitialRoleId(newUserRoleId);
 		});
 	};

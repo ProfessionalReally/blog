@@ -1,11 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import {
-	appReducer,
-	postReducer,
-	postsReducer,
-	userReducer,
-	usersReducer,
-} from '@src/redux/reducers';
+import { appReducer, postReducer, userReducer } from '@src/redux/reducers';
 
 export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
@@ -15,9 +9,7 @@ export const store = configureStore({
 	reducer: {
 		app: appReducer,
 		post: postReducer,
-		posts: postsReducer,
 		user: userReducer,
-		users: usersReducer,
 	},
 });
 

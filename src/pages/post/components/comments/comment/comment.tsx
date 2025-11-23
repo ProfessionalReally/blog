@@ -3,7 +3,6 @@ import type { FC } from 'react';
 
 import { Icon } from '@src/components';
 import { ROLES } from '@src/constants';
-import { useServerRequest } from '@src/hooks';
 import { removeComment } from '@src/redux/actions';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks.ts';
 import { closeModal, openModal } from '@src/redux/reducers';
@@ -24,7 +23,6 @@ const CommentContainer: FC<CommentContainerProps> = ({
 }) => {
 	const { author, content, id, publishedAt } = comment;
 	const dispatch = useAppDispatch();
-	const requestServer = useServerRequest();
 	const userRole = useAppSelector(selectUserRole);
 
 	const onCommentRemove = (id: string) => {
@@ -32,7 +30,7 @@ const CommentContainer: FC<CommentContainerProps> = ({
 			openModal({
 				onCancel: () => dispatch(closeModal()),
 				onConfirm: () => {
-					dispatch(removeComment({ id, postId, requestServer }));
+					dispatch(removeComment({ id, postId }));
 					dispatch(closeModal());
 				},
 				text: 'Удалить комментарий?',

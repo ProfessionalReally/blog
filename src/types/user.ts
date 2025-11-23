@@ -1,7 +1,9 @@
-export interface IUser extends IUserAuth {
+import type { Role } from '@src/constants';
+
+export interface IUser extends Pick<IUserAuth, 'login'> {
 	id: string;
 	registeredAt: string;
-	roleId: string;
+	roleId: number;
 }
 
 export interface IUserAuth {
@@ -9,6 +11,7 @@ export interface IUserAuth {
 	password: string;
 }
 
-export interface IUserSession extends IUser {
-	session: string;
+export interface IUserRole {
+	id: Role;
+	name: string;
 }

@@ -1,8 +1,7 @@
-import type { IPostState } from '@src/redux/reducers';
+import type { IComment, IPost } from '@src/types';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ERROR } from '@src/constants';
-import { useServerRequest } from '@src/hooks';
 import {
 	ADD_COMMENT,
 	FETCH_POST,
@@ -10,98 +9,120 @@ import {
 	REMOVE_POST,
 	SAVE_POST,
 } from '@src/redux/actions/actionTypes';
+import { request } from '@src/utils';
 
 export const fetchPost = createAsyncThunk<
-	IPostState,
-	{ id: string; requestServer: ReturnType<typeof useServerRequest> },
+	IPost,
+	{ id: string },
 	{
 		rejectValue: string;
 	}
->(FETCH_POST, async ({ id, requestServer }, { rejectWithValue }) => {
+>(FETCH_POST, async ({ id }, { rejectWithValue }) => {
 	try {
-		const result = await requestServer('fetchPost', id);
+		const { data, error } = await request<IPost, { id: string }>({
+			method: 'GET',
+			url: `/posts/${id}`,
+		});
 
-		if (!result || !result.response) {
-			return rejectWithValue(result?.error ?? ERROR.SERVER_ERROR);
+		if (!data || error) {
+			return rejectWithValue(error ?? ERROR.SERVER_ERROR);
 		}
 
-		return result.response;
+		return data;
 	} catch (error) {
 		return rejectWithValue(error.message);
 	}
 });
 
 export const addComment = createAsyncThunk<
-	IPostState,
+	IComment,
 	{
 		content: string;
 		postId: string;
-		requestServer: ReturnType<typeof useServerRequest>;
-		userId: string;
 	}
->(ADD_COMMENT, async ({ content, postId, requestServer, userId }) => {
-	const result = await requestServer(
-		'addPostComment',
-		content,
-		postId,
-		userId,
-	);
+>(ADD_COMMENT, async ({ content, postId }, { rejectWithValue }) => {
+	const { data, error } = await request<
+		IComment,
+		{ content: string; postId: string }
+	>({
+		data: {
+			content,
+			postId,
+		},
+		method: 'POST',
+		url: `/comments`,
+	});
 
-	if (!result || !result.response) {
-		return;
+	if (!data || error) {
+		return rejectWithValue(error ?? ERROR.SERVER_ERROR);
 	}
 
-	return result.response;
+	return data;
 });
 
 export const removeComment = createAsyncThunk<
-	IPostState,
+	{
+		id: string;
+	},
 	{
 		id: string;
 		postId: string;
-		requestServer: ReturnType<typeof useServerRequest>;
 	}
->(REMOVE_COMMENT, async ({ id, postId, requestServer }) => {
-	const result = await requestServer('removePostComment', id, postId);
+>(REMOVE_COMMENT, async ({ id, postId }, { rejectWithValue }) => {
+	const { error } = await request<void, { postId: string }>({
+		data: {
+			postId,
+		},
+		method: 'DELETE',
+		url: `/comments/${id}`,
+	});
 
-	if (!result || !result.response) {
-		return;
+	if (error) {
+		return rejectWithValue(error ?? ERROR.SERVER_ERROR);
 	}
 
-	return result.response;
+	return {
+		id,
+	};
 });
 
 export const savePost = createAsyncThunk<
-	IPostState,
-	{
-		content: string;
-		id: string;
-		imageUrl: string;
-		requestServer: ReturnType<typeof useServerRequest>;
-		title: string;
+	IPost,
+	Pick<IPost, 'content' | 'imageUrl' | 'title'> & {
+		id?: string;
 	}
->(SAVE_POST, async ({ requestServer, ...newPostData }) => {
-	const result = await requestServer('savePost', newPostData);
+>(SAVE_POST, async ({ id, ...newPostData }, { rejectWithValue }) => {
+	const { data, error } = id
+		? await request<IPost, Pick<IPost, 'content' | 'imageUrl' | 'title'>>({
+				data: newPostData,
+				method: 'PATCH',
+				url: `/posts/${id}`,
+			})
+		: await request<IPost, Pick<IPost, 'content' | 'imageUrl' | 'title'>>({
+				data: newPostData,
+				method: 'POST',
+				url: '/posts',
+			});
 
-	if (!result || !result.response) {
-		return;
+	if (!data || error) {
+		return rejectWithValue(error ?? ERROR.SERVER_ERROR);
 	}
 
-	return result.response;
+	return data;
 });
 
 export const removePost = createAsyncThunk<
-	IPostState,
+	void,
 	{
 		id: string;
-		requestServer: ReturnType<typeof useServerRequest>;
 	}
->(REMOVE_POST, async ({ id, requestServer }) => {
-	const result = await requestServer('removePost', id);
+>(REMOVE_POST, async ({ id }, { rejectWithValue }) => {
+	const { error } = await request({
+		method: 'DELETE',
+		url: `/posts/${id}`,
+	});
 
-	if (!result || !result.response) {
-		return;
+	if (error) {
+		return rejectWithValue(error ?? ERROR.SERVER_ERROR);
 	}
-
-	return result.response;
 });

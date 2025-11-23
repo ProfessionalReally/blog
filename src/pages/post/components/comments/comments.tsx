@@ -2,10 +2,9 @@ import type { IComment } from '@src/types';
 
 import { Icon } from '@src/components';
 import { ROLES } from '@src/constants';
-import { useServerRequest } from '@src/hooks';
 import { addComment } from '@src/redux/actions';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks.ts';
-import { selectUserId, selectUserRole } from '@src/redux/selectors';
+import { selectUserRole } from '@src/redux/selectors';
 import { type FC, useState } from 'react';
 import styled from 'styled-components';
 
@@ -23,18 +22,12 @@ const CommentsContainer: FC<CommentsContainerProps> = ({
 	postId,
 }) => {
 	const [newComment, setNewComment] = useState('');
-	const userId = useAppSelector(selectUserId);
 	const dispatch = useAppDispatch();
-	const requestServer = useServerRequest();
 	const userRole = useAppSelector(selectUserRole);
 
-	const onNewCommentAdd = async (
-		postId: string,
-		userId: string,
-		content: string,
-	) => {
+	const onNewCommentAdd = async (postId: string, content: string) => {
 		if (!newComment) return;
-		await dispatch(addComment({ content, postId, requestServer, userId }));
+		await dispatch(addComment({ content, postId }));
 		setNewComment('');
 	};
 
@@ -53,9 +46,7 @@ const CommentsContainer: FC<CommentsContainerProps> = ({
 						<Icon
 							id='fa-paper-plane-o'
 							isButton
-							onClick={() =>
-								onNewCommentAdd(postId, userId, newComment)
-							}
+							onClick={() => onNewCommentAdd(postId, newComment)}
 							size={'20px'}
 						/>
 					</div>

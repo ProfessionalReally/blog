@@ -7,7 +7,7 @@ import * as React from 'react';
 import { Error } from '../error/error';
 
 type PrivateContentProps = {
-	accessRoles: string[];
+	accessRoles: number[];
 	children: React.ReactNode;
 	error?: null | string;
 };

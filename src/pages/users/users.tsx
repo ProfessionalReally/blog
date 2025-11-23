@@ -1,9 +1,9 @@
 import { PrivateContent } from '@src/components';
 import { ROLES } from '@src/constants';
-import { useServerRequest } from '@src/hooks';
 import { useAppSelector } from '@src/redux/hooks/hooks.ts';
 import { selectUserRole } from '@src/redux/selectors';
-import { checkAccess } from '@src/utils';
+import { type IUser, type IUserRole } from '@src/types';
+import { checkAccess, request } from '@src/utils';
 import { type FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -21,21 +21,20 @@ const StyledTable = styled.div`
 `;
 
 const UsersContainer: FC<UsersContainerProps> = ({ className }) => {
-	const [roles, setRoles] = useState([]);
-	const [users, setUsers] = useState([]);
+	const [roles, setRoles] = useState<IUserRole[]>([]);
+	const [users, setUsers] = useState<IUser[]>([]);
 	const [shouldUpdate, setShouldUpdate] = useState(false);
 	const [error, setError] = useState<null | string>(null);
-
-	const requestServer = useServerRequest();
 	const userRole = useAppSelector(selectUserRole);
 
 	const onUserRemove = (id: string) => {
 		if (!checkAccess([ROLES.ADMIN], userRole)) {
 			return;
 		}
-		requestServer('removeUser', id).then(() =>
-			setShouldUpdate(!shouldUpdate),
-		);
+		request({
+			method: 'DELETE',
+			url: `/users/${id}`,
+		}).then(() => setShouldUpdate(!shouldUpdate));
 	};
 
 	useEffect(() => {
@@ -43,20 +42,30 @@ const UsersContainer: FC<UsersContainerProps> = ({ className }) => {
 			return;
 		}
 		Promise.all([
-			requestServer('fetchRoles'),
-			requestServer('fetchUsers'),
+			request<IUserRole[]>({
+				method: 'GET',
+				url: '/users/roles',
+			}),
+			request({
+				method: 'GET',
+				url: '/users',
+			}),
 		]).then(([rolesRes, usersRes]) => {
-			if (!rolesRes || !usersRes) return;
-
-			if (rolesRes.error || usersRes.error) {
+			if (
+				rolesRes.error ||
+				usersRes.error ||
+				!Array.isArray(rolesRes.data) ||
+				!Array.isArray(usersRes.data)
+			) {
 				setError(rolesRes.error || usersRes.error);
 				return;
 			}
-			setRoles(rolesRes.response);
-			setUsers(usersRes.response);
+
+			setRoles(rolesRes.data);
+			setUsers(usersRes.data);
 		});
 		setShouldUpdate(false);
-	}, [requestServer, shouldUpdate, userRole]);
+	}, [shouldUpdate, userRole]);
 
 	return (
 		<PrivateContent accessRoles={[ROLES.ADMIN]} error={error}>

@@ -1,15 +1,10 @@
 import type { FC } from 'react';
 
-import { server } from '@src/bff';
 import { Button, Icon } from '@src/components';
 import { ROLES, ROUTES } from '@src/constants';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks/hooks';
 import { logout } from '@src/redux/reducers';
-import {
-	selectUserLogin,
-	selectUserRole,
-	selectUserSession,
-} from '@src/redux/selectors';
+import { selectUserLogin, selectUserRole } from '@src/redux/selectors';
 import { checkAccess, request } from '@src/utils';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -42,7 +37,7 @@ const ControlPanelContainer: FC<ControlPanelType> = ({ className }) => {
 	const login = useAppSelector(selectUserLogin);
 
 	const onLogout = () => {
-		request<void, void>({
+		request({
 			method: 'post',
 			url: '/auth/logout',
 		});

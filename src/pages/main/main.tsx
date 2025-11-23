@@ -1,9 +1,10 @@
-import { PAGINATION_LIMIT } from '@src/bff/constants';
-import { useServerRequest } from '@src/hooks';
+import type { IPost, IPostsResponse } from '@src/types';
+
+import { PAGINATION_LIMIT } from '@src/constants';
 import { debounce } from '@src/pages/main/utils';
 import { request } from '@src/utils';
-import { type FC, useEffect, useMemo, useState } from 'react';
 import * as React from 'react';
+import { type FC, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { Pagination, PostCard, Search } from './components';
@@ -13,16 +14,14 @@ type MainContainerProps = {
 };
 
 const MainContainer: FC<MainContainerProps> = ({ className }) => {
-	const [posts, setPosts] = useState([]);
+	const [posts, setPosts] = useState<IPost[]>([]);
 	const [page, setPage] = useState(1);
 	const [lastPage, setLastPage] = useState(1);
 	const [shouldSearch, setShouldSearch] = useState(false);
 	const [searchPhrase, setSearchPhrase] = useState('');
 
-	const requestServer = useServerRequest();
-
 	useEffect(() => {
-		request({
+		request<IPostsResponse>({
 			method: 'get',
 			params: {
 				limit: PAGINATION_LIMIT,
@@ -30,12 +29,15 @@ const MainContainer: FC<MainContainerProps> = ({ className }) => {
 				search: searchPhrase,
 			},
 			url: '/posts',
-		}).then((postsRes) => {
-			if (!postsRes || !postsRes.response || postsRes.error) return;
-			setPosts(postsRes.response.posts);
-			setLastPage(postsRes.response.lastPage);
+		}).then(({ data, error }) => {
+			if (!data || error) {
+				return;
+			}
+			setPosts(data.data);
+			setLastPage(data.pagination.lastPage);
 		});
-	}, [page, requestServer, shouldSearch]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [page, shouldSearch]);
 
 	const debounceFn = (shouldSearch: boolean) => {
 		setPage(1);
@@ -53,12 +55,17 @@ const MainContainer: FC<MainContainerProps> = ({ className }) => {
 		debouncedSearch(shouldSearch);
 	};
 
+	const postsWithComments = posts.map((post) => ({
+		...post,
+		commentsCount: post.comments.length,
+	}));
+
 	return (
 		<div className={className}>
 			<Search onChange={onSearchChange} searchPhrase={searchPhrase} />
-			{posts.length > 0 ? (
+			{postsWithComments.length > 0 ? (
 				<div className='post-list'>
-					{posts.map(
+					{postsWithComments.map(
 						({
 							commentsCount,
 							id,

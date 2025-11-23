@@ -1,2 +1,2 @@
-export const checkAccess = (access: string[], userRole: string) =>
+export const checkAccess = (access: number[], userRole: number) =>
 	access.includes(userRole);

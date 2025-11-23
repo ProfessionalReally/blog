@@ -5,7 +5,7 @@ export type IUserState = {
 	id: string;
 	login: string;
 	registeredAt: string;
-	roleId: string;
+	roleId: number;
 };
 
 const initialUserState: IUserState = {
